@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">WI-FI Radar</string>
+    <string name="button">Search close-by networks</string>
+    <string name="action_settings">ACTION</string>
+    <string name="title_activity_page2">WiFi List</string>
+    <string name="title_activity_page3">Testing</string>
+    <string name="tester">TEST</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_page33">Page33</string>
+    <string name="descri">App start</string>
+</resources>
