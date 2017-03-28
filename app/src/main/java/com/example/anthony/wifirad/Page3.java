@@ -48,7 +48,7 @@ public class Page3 extends AppCompatActivity
     // here you can design your functions and work and call it anywhere you want it to
     public void measure(View v)
     {
-        wifiT = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiT = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         scn2=new Testerscn();
         wifiT.startScan();
         registerReceiver(scn2,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));

@@ -35,7 +35,7 @@ public class Page2 extends AppCompatActivity {
 
     public void selectwifi(View v)
     {
-        wifiManager=(WifiManager)getSystemService(Context.WIFI_SERVICE);
+        wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         scn=new scanner();
         wifiManager.startScan();
         registerReceiver(scn, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
