@@ -1,13 +1,17 @@
 package com.example.anthony.wifirad;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -48,6 +52,10 @@ public class Page3 extends AppCompatActivity
     // here you can design your functions and work and call it anywhere you want it to
     public void measure(View v)
     {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
         wifiT = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         scn2=new Testerscn();
         wifiT.startScan();
