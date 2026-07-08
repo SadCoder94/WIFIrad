@@ -44,9 +44,12 @@ public class Page2 extends AppCompatActivity {
             return;
         }
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        scn=new scanner();
-        wifiManager.startScan();
+        if (scn == null) {
+            scn = new scanner();
+        }
         registerReceiver(scn, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifiManager.startScan();
+        
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -65,6 +68,9 @@ public class Page2 extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent)
         {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             scanList=wifiManager.getScanResults();
             int size=scanList.size();
             nwifi=new String[size];
@@ -73,8 +79,13 @@ public class Page2 extends AppCompatActivity {
                 nwifi[i]=scanList.get(i).SSID;
             }
             lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,nwifi));
+            
+            try {
+                unregisterReceiver(this);
+            } catch (IllegalArgumentException e) {
+                // Receiver not registered
+            }
         }
     }
 
 }
-

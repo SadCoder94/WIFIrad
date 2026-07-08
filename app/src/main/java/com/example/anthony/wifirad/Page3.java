@@ -49,7 +49,6 @@ public class Page3 extends AppCompatActivity
         textView.setText(str);
     }
 
-    // here you can design your functions and work and call it anywhere you want it to
     public void measure(View v)
     {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -57,39 +56,44 @@ public class Page3 extends AppCompatActivity
             return;
         }
         wifiT = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        scn2=new Testerscn();
-        wifiT.startScan();
-        registerReceiver(scn2,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        srcwifi=new String[size];
-
-        for(int i=0;i<size;i++)
-        {
-            srcwifi[i]=scanList.get(i).SSID;
+        if (scn2 == null) {
+            scn2 = new Testerscn();
         }
-
-        for(int i=0;i<size;i++)
-            if (str.compareTo(srcwifi[i]) == 0)
-            {
-                lev=scanList.get(i).level;
-            }
-
-        lev = calc(lev);
-        per(lev);
-
+        registerReceiver(scn2, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifiT.startScan();
     }
-
-
 
     private class Testerscn extends BroadcastReceiver
     {
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            scanList=wifiT.getScanResults();
-            size=scanList.size();
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            scanList = wifiT.getScanResults();
+            size = scanList.size();
+            srcwifi = new String[size];
+
+            for (int i = 0; i < size; i++) {
+                srcwifi[i] = scanList.get(i).SSID;
+            }
+
+            for (int i = 0; i < size; i++) {
+                if (str.compareTo(srcwifi[i]) == 0) {
+                    lev = scanList.get(i).level;
+                }
+            }
+
+            lev = calc(lev);
+            per(lev);
+            
+            try {
+                unregisterReceiver(this);
+            } catch (IllegalArgumentException e) {
+                // Receiver not registered
+            }
         }
-
-
     }
 
     public int calc(int level)//keeping signal level in limits
@@ -108,6 +112,3 @@ public class Page3 extends AppCompatActivity
         lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, al));
     }
 }
-
-
-
